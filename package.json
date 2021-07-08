@@ -7,6 +7,11 @@
     "build": "webextension-toolbox build chrome"
   },
   "devDependencies": {
+    "vue-loader": "^15.9.2",
+    "vue-template-compiler": "^2.6.14",
     "webextension-toolbox": "latest"
+  },
+  "dependencies": {
+    "vue": "^2.6.14"
   }
 }
