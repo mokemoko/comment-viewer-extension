@@ -3,7 +3,7 @@ browser.runtime.onInstalled.addListener((details) => {
 })
 
 browser.tabs.onUpdated.addListener(async (tabId) => {
+  console.log("onUpdated")
   browser.pageAction.show(tabId)
+  chrome.tabs.sendMessage(tabId, "toggle_sidebar")
 })
-
-console.log(`'Allo 'Allo! Event Page for Page Action`)

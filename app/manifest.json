@@ -43,6 +43,10 @@
       "all_frames": false
     }
   ],
+  "web_accessible_resources": [
+    "pages/*",
+    "scripts/*"
+  ],
   "permissions": [
     "storage"
   ]
