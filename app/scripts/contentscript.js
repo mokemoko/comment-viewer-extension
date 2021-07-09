@@ -1,4 +1,18 @@
+import { TOGGLE_SIDEBAR } from "./constant";
+
 class Extension {
+  constructor() {
+    chrome.runtime.onMessage.addListener(message => {
+      switch (message) {
+        case TOGGLE_SIDEBAR:
+          this.toggle();
+          break;
+        default:
+          break;
+      }
+    });
+  }
+
   toggle () {
     if (window.top !== window.self) {
       return;
@@ -11,29 +25,16 @@ class Extension {
   }
 
   toggleVisibility () {
+    const style = this.el.style;
+    style.display = style.display === "" ? "none" : "";
   }
 
   install () {
-    this.el = document.createElement('iframe');
+    this.el = document.createElement("iframe");
     this.el.id = "comment-viewer-ex";
-    this.el.src = this.src();
+    this.el.src = chrome.runtime.getURL("pages/inner_content.html");
     document.body.appendChild(this.el);
   }
-
-  src () {
-    return chrome.runtime.getURL(`pages/popup.html`)
-  }
-
 }
 
-const extension = new Extension()
-
-chrome.runtime.onMessage.addListener(message => {
-  switch (message) {
-    case "toggle_sidebar":
-      extension.toggle()
-      break
-    default:
-      break
-  }
-})
+new Extension();

@@ -1,5 +1,5 @@
 <template>
-  <p>Hello Vue !</p>
+  <p>Hello Vue !!</p>
 </template>
 
 <script>

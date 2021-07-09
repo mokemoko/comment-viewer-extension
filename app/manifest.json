@@ -14,18 +14,13 @@
       "scripts/background.js"
     ]
   },
-  "page_action": {
+  "browser_action": {
     "default_icon": {
       "19": "images/icon-19.png",
       "38": "images/icon-38.png"
     },
     "default_title": "__MSG_browserActionTitle__",
-    "default_popup": "pages/popup.html"
-  },
-  "options_page": "pages/options.html",
-  "options_ui": {
-    "page": "pages/options.html",
-    "chrome_style": true
+    "default_popup": "pages/browser_action.html"
   },
   "content_scripts": [
     {
