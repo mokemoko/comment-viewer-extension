@@ -1,4 +1,4 @@
-import { TOGGLE_SIDEBAR } from "./constant";
+import { TOGGLE_SIDEBAR } from "./util/constant";
 
 class Extension {
   constructor() {
