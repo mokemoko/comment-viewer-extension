@@ -1,9 +1,9 @@
 import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
-import { sha256 } from "../util/crypto";
+import {sha256} from "../util/crypto";
 
-const loginUrl = "https://us-central1-commentscreen-app.cloudfunctions.net/enterRoom";
+const endpointUrl = "https://us-central1-commentscreen-app.cloudfunctions.net";
 
 const config = {
   apiKey: "AIzaSyBoXUBuV5nqeSv-_ONhdViA5VKc_80cwwQ",
@@ -21,17 +21,14 @@ class CommentScreen {
     firebase.initializeApp(config);
     this.auth = firebase.auth();
     this.db = firebase.firestore();
+    this.roomId = "";
   }
 
-  async login(room_id, password) {
-    await this.auth.signInAnonymously();
-    const user = this.auth.currentUser;
-    const jwt = await user.getIdToken();
-    const pass_hash = await sha256(password);
-
-    const res = await fetch(loginUrl, {
+  async post(path, body) {
+    const jwt = await this.auth.currentUser.getIdToken();
+    const res = await fetch(`${endpointUrl}/${path}`, {
       method: "POST",
-      body: JSON.stringify({data: {uid: user.uid, room_id, password: pass_hash}}),
+      body,
       headers: {
         Authorization: `Bearer ${jwt}`,
         "Content-Type": "application/json",
@@ -40,15 +37,50 @@ class CommentScreen {
     if (!res.ok) {
       throw new Error(`${res.status}`);
     }
-    this.roomId = room_id;
     return await res.json();
+  }
+
+  async getRoomInfo(room_name) {
+    const body = {
+      data: {
+        hashtag: room_name
+      }
+    };
+    return await this.post('getRoomInfo', JSON.stringify(body));
+  }
+
+  async login(room_name, password) {
+    await this.auth.signInAnonymously();
+    const info = await this.getRoomInfo(room_name);
+    const room_id = info.result.room_id;
+
+    const body = {
+      data: {
+        uid: this.auth.currentUser.uid,
+        room_id,
+      }
+    };
+    if (password !== "") {
+      body.data.password = await sha256(password);
+    }
+    const res = await this.post('enterRoom', JSON.stringify(body));
+
+    this.roomId = room_id;
+
+    return res;
   }
 
   async fetchComments() {
     const snapshot = await this.db.collection(`/rooms/${this.roomId}/comments`).get();
     const comments = [];
-    snapshot.forEach(doc => comments.push(doc.data()));
-    return comments;
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      comments.push({
+        ...data,
+        id: doc.id,
+      })
+    });
+    return comments.sort((a, b) => a.created_at - b.created_at);
   }
 }
 
