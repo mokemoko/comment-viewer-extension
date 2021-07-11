@@ -1,7 +1,7 @@
 import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
-import {sha256} from "../util/crypto";
+import { sha256 } from "../util/crypto";
 
 const endpointUrl = "https://us-central1-commentscreen-app.cloudfunctions.net";
 
@@ -70,17 +70,34 @@ class CommentScreen {
     return res;
   }
 
-  async fetchComments() {
-    const snapshot = await this.db.collection(`/rooms/${this.roomId}/comments`).get();
-    const comments = [];
-    snapshot.forEach(doc => {
-      const data = doc.data();
-      comments.push({
-        ...data,
-        id: doc.id,
-      })
+  async writeComment(text) {
+    await this.db.collection(`/rooms/${this.roomId}/comments`).add({
+      uid: this.auth.currentUser.uid,
+      name: null,
+      text,
+      is_question: false,
+      created_at: firebase.firestore.FieldValue.serverTimestamp(),
     });
-    return comments.sort((a, b) => a.created_at - b.created_at);
+  }
+
+  listen(callback, limit = 100) {
+    this.db.collection(`/rooms/${this.roomId}/comments`)
+      .orderBy("created_at")
+      .limitToLast(limit)
+      .onSnapshot(snapshot => {
+        const comments = snapshot.docChanges().map(change => {
+          const doc = change.doc;
+          if (change.type !== "added") {
+            // ignore modified / removed events.
+            return;
+          }
+          return {
+            ...doc.data(),
+            id: doc.id,
+          };
+        }).filter(e => e);
+        callback(comments);
+      });
   }
 }
 

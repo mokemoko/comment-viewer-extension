@@ -11,7 +11,7 @@
       </div>
       <footer>
         <div class="grid">
-          <input type="text" placeholder="comment" v-model="inputComment">
+          <input type="text" placeholder="comment" v-model="inputComment" @keydown.enter="writeComment">
         </div>
       </footer>
     </div>
@@ -39,13 +39,24 @@ export default {
       try {
         await CommentScreen.login(this.room, this.password);
         this.authed = true;
-        this.comments = await CommentScreen.fetchComments();
-        await sleep(500);
-        scrollBottom(".comment-list");
+        CommentScreen.listen(async comments => {
+          this.comments.push(...comments);
+          await sleep(100);
+          scrollBottom('.comment-list');
+        });
       } catch (e) {
         console.error(e);
       }
-    }
+    },
+    writeComment: async function (event) {
+      if (event.keyCode !== 13) {
+        // ignore conversion enter event.
+        return;
+      }
+      const text = this.inputComment;
+      this.inputComment = "";
+      await CommentScreen.writeComment(text);
+    },
   },
 }
 </script>
