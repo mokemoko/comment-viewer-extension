@@ -70,6 +70,14 @@ class CommentScreen {
     return res;
   }
 
+  async writeEmoji(text) {
+    await this.db.collection(`/rooms/${this.roomId}/emojis`).add({
+      created_by: this.auth.currentUser.uid,
+      text,
+      created_at: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+  }
+
   async writeComment(text) {
     await this.db.collection(`/rooms/${this.roomId}/comments`).add({
       uid: this.auth.currentUser.uid,

@@ -11,7 +11,13 @@
       </div>
       <footer>
         <div class="grid">
-          <input type="text" placeholder="comment" v-model="inputComment" @keydown.enter="writeComment">
+          <fieldset>
+            <label for="switch">
+              <input type="checkbox" id="switch" name="switch" role="switch" v-model="asEmoji">
+              Post as emoji
+            </label>
+            <input type="text" placeholder="comment" v-model="inputComment" @keydown.enter="writeComment">
+          </fieldset>
         </div>
       </footer>
     </div>
@@ -32,6 +38,7 @@ export default {
       password: "",
       comments: [],
       inputComment: "",
+      asEmoji: false,
     };
   },
   methods: {
@@ -54,8 +61,12 @@ export default {
         return;
       }
       const text = this.inputComment;
-      this.inputComment = "";
-      await CommentScreen.writeComment(text);
+      if (this.asEmoji) {
+        await CommentScreen.writeEmoji(text);
+      } else {
+        this.inputComment = "";
+        await CommentScreen.writeComment(text);
+      }
     },
   },
 }
@@ -69,7 +80,7 @@ footer {
 }
 .comment-list {
   overflow: scroll;
-  height: calc(100vh - 100px);
+  height: calc(100vh - 140px);
   overflow-wrap: break-word;
 }
 </style>
