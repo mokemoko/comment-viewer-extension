@@ -70,5 +70,6 @@ footer {
 .comment-list {
   overflow: scroll;
   height: calc(100vh - 100px);
+  overflow-wrap: break-word;
 }
 </style>

@@ -1,10 +1,11 @@
 #comment-viewer-ex {
   background-color: azure;
   height: 100%;
-  width: 360px;
+  width: 320px;
   position: fixed;
   top: 0px;
   right: 0px;
   z-index: 2147483647;
   border: 0px;
+  visibility: visible;
 }
