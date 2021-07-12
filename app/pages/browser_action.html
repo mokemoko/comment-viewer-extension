@@ -2,12 +2,24 @@
 <html>
 <head>
   <meta charset="utf-8" />
+  <link rel="stylesheet" type="text/css" href="../styles/pico.min.css">
   <link rel="stylesheet" type="text/css" href="../styles/browser_action.css">
 </head>
 <body>
-
-  <button id="switch">コメント表示切替</button>
-
+  <main class="container">
+    <fieldset>
+      <label for="isVisible">
+        <input type="checkbox" id="isVisible" name="isVisible" role="switch">
+        サイドバー表示
+      </label>
+    </fieldset>
+    <fieldset>
+      <label for="isDarkMode">
+        <input type="checkbox" id="isDarkMode" name="isDarkMode" role="switch">
+        Dark Mode
+      </label>
+    </fieldset>
+  </main>
   <script src="../scripts/browser_action.js"></script>
 </body>
 </html>
