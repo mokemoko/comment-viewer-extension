@@ -50,6 +50,9 @@ export default {
           this.comments.push(...comments);
           await sleep(100);
           scrollBottom('.comment-list');
+
+          // TODO: refactor
+          window.parent.postMessage(comments, "*");
         });
       } catch (e) {
         console.error(e);

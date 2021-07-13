@@ -1,19 +1,35 @@
-import { GET_PAGE_INFO, IS_VISIBLE, IS_DARK_MODE } from "./util/constant";
+import { GET_PAGE_INFO, IS_VISIBLE, IS_DARK_MODE, IS_NICO_MODE } from "./util/constant";
+import {sleep} from "./util/util";
+
+// TODO: allow flexible settings
+const animDuration = 8;
+const commentSize = 32;
 
 class Extension {
   constructor() {
     this.isDarkMode = false;
+    this.isNicoMode = false;
+
     chrome.runtime.onMessage.addListener((req, sender, callback) => {
       switch (req.type) {
         case IS_VISIBLE:
-          this.toggle();
+          this.switchVisible(req.value);
           break;
         case IS_DARK_MODE:
           this.switchDarkMode(req.value);
           break;
+        case IS_NICO_MODE:
+          this.switchNicoMode(req.value);
+          break;
         case GET_PAGE_INFO:
           callback(this.info());
           break;
+      }
+    });
+
+    window.addEventListener("message", e => {
+      if (this.isNicoMode) {
+        e.data.forEach(this.addComment);
       }
     });
   }
@@ -30,20 +46,15 @@ class Extension {
     this.isDarkMode = flg;
   }
 
-  toggle () {
-    if (window.top !== window.self) {
-      return;
-    }
-    if (this.el) {
-      this.toggleVisibility();
-    } else {
-      this.install();
-    }
+  switchNicoMode (flg) {
+    this.isNicoMode = flg;
   }
 
-  toggleVisibility () {
-    const style = this.el.style;
-    style.display = style.display === "" ? "none" : "";
+  switchVisible (flg) {
+    if (!this.el) {
+      this.install();
+    }
+    this.el.style.display = flg ? "" : "none";
   }
 
   install () {
@@ -51,6 +62,18 @@ class Extension {
     this.el.id = "comment-viewer-ex";
     this.el.src = chrome.runtime.getURL("pages/inner_content.html");
     document.body.appendChild(this.el);
+  }
+
+  async addComment (comment) {
+    const el = document.createElement("p");
+    el.className = "cve-comment";
+    el.style.fontSize = `${commentSize}px`;
+    el.style.animationDuration = `${animDuration}s`;
+    el.style.top = `${20 + Math.random() * (window.innerHeight - 60)}px`;
+    el.innerText = comment.text;
+    document.body.appendChild(el);
+    await sleep(animDuration * 1000);
+    el.remove();
   }
 }
 
