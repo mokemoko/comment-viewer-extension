@@ -1,29 +1,36 @@
 # comment viewer extension
 
-comment viewer for multi chat tools.
+[CommentScreen](https://commentscreen.com/) のコメントを任意のページで確認・投稿できるようになるChrome拡張機能
 
 ## Install
 
-	$ npm install
+[リリースページ](https://github.com/mokemoko/comment-viewer-extension/releases) から最新バージョンのZipをダウンロードし、拡張機能ページにDrag&Dropでインストールしてください
 
-## Development
+## Features
 
-    npm run dev chrome
-    npm run dev firefox
-    npm run dev opera
-    npm run dev edge
+### Supported
 
-## Build
+* コメントの表示・投稿
+* 絵文字の投稿
+* パスワード付きルームへの入室
+* 発表者モード
+* ダークモード
 
-    npm run build chrome
-    npm run build firefox
-    npm run build opera
-    npm run build edge
+### Unsupported
 
-## Environment
+* 絵文字の表示
+* 投稿者/質問フラグなどのコメントの付随情報表示
 
-The build tool also defines a variable named `process.env.NODE_ENV` in your scripts. 
+## For developer
 
-## Docs
+### Development
+
+    npm run dev
+
+### Build
+
+    npm run build
+
+## Refs
 
 * [webextension-toolbox](https://github.com/HaNdTriX/webextension-toolbox)
