@@ -1,6 +1,6 @@
 {
   "name": "comment-viewer-extension",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "comment viewer for multi chat tools.",
   "scripts": {
     "dev": "webextension-toolbox dev chrome",
