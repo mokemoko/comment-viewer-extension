@@ -38,6 +38,7 @@ class Extension {
     return {
       isVisible: this.el && this.el.style.display === "",
       isDarkMode: this.isDarkMode,
+      isNicoMode: this.isNicoMode,
     };
   }
 
