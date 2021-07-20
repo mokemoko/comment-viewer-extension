@@ -4,7 +4,7 @@
   "description": "comment viewer for multi chat tools.",
   "scripts": {
     "dev": "webextension-toolbox dev chrome",
-    "build": "webextension-toolbox build chrome"
+    "build": "webextension-toolbox build chrome && webextension-toolbox build firefox && webextension-toolbox build opera && webextension-toolbox build edge"
   },
   "devDependencies": {
     "css-loader": "^5.2.6",
