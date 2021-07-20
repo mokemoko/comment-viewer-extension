@@ -10,7 +10,8 @@ class Extension {
     this.isDarkMode = false;
     this.isNicoMode = false;
 
-    chrome.runtime.onMessage.addListener((req, sender, callback) => {
+    browser.runtime.onMessage.addListener((req, sender, callback) => {
+      let res = {};
       switch (req.type) {
         case IS_VISIBLE:
           this.switchVisible(req.value);
@@ -22,9 +23,10 @@ class Extension {
           this.switchNicoMode(req.value);
           break;
         case GET_PAGE_INFO:
-          callback(this.info());
+          res = this.info();
           break;
       }
+      return Promise.resolve(res);
     });
 
     window.addEventListener("message", e => {
@@ -61,7 +63,7 @@ class Extension {
   install () {
     this.el = document.createElement("iframe");
     this.el.id = "comment-viewer-ex";
-    this.el.src = chrome.runtime.getURL("pages/inner_content.html");
+    this.el.src = browser.runtime.getURL("pages/inner_content.html");
     document.body.appendChild(this.el);
   }
 

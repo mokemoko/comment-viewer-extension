@@ -1,10 +1,10 @@
 # comment viewer extension
 
-[CommentScreen](https://commentscreen.com/) のコメントを任意のページで確認・投稿できるようになるChrome拡張機能
+[CommentScreen](https://commentscreen.com/) のコメントを任意のページで確認・投稿できるようになるブラウザ拡張機能
 
 ## Install
 
-[リリースページ](https://github.com/mokemoko/comment-viewer-extension/releases) から最新バージョンのZipをダウンロードし、拡張機能ページにDrag&Dropでインストールしてください
+[リリースページ](https://github.com/mokemoko/comment-viewer-extension/releases) から利用しているブラウザに対応した最新バージョンのアーカイブをダウンロードし、拡張機能ページにDrag&Dropでインストールしてください
 
 ## Features
 

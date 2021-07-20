@@ -1,27 +1,25 @@
 import { GET_PAGE_INFO } from "./util/constant";
 import { IS_VISIBLE, IS_DARK_MODE, IS_NICO_MODE } from "./util/constant";
 
-function onChange(event) {
+async function onChange(event) {
   const el = event.target;
-  chrome.tabs.query({ currentWindow: true, active: true }, tabs => {
-    chrome.tabs.sendMessage(tabs[0].id, { type: el.id, value: el.checked });
+  const tabs = await browser.tabs.query({ currentWindow: true, active: true });
+  await browser.tabs.sendMessage(tabs[0].id, { type: el.id, value: el.checked });
+}
+
+async function bindValue() {
+  const tabs = await browser.tabs.query({ currentWindow: true, active: true });
+  const info = await browser.tabs.sendMessage(tabs[0].id, { type: GET_PAGE_INFO });
+
+  [IS_VISIBLE, IS_DARK_MODE, IS_NICO_MODE].forEach(key => {
+    const el = document.querySelector(`#${key}`)
+    el.checked = info[key];
+    el.addEventListener("change", onChange);
   });
 }
 
-function bindValue() {
-  chrome.tabs.query({ currentWindow: true, active: true }, tabs => {
-    chrome.tabs.sendMessage(tabs[0].id, { type: GET_PAGE_INFO }, info => {
-      [IS_VISIBLE, IS_DARK_MODE, IS_NICO_MODE].forEach(key => {
-        const el = document.querySelector(`#${key}`)
-        el.checked = info[key];
-        el.addEventListener("change", onChange);
-      });
-    });
-  });
-}
-
-function onLoad() {
-  bindValue();
+async function onLoad() {
+  await bindValue();
 }
 
 onLoad();
