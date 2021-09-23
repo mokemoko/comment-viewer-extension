@@ -1,14 +1,10 @@
 name: Build
-
 on:
   push:
     branches: [ main ]
-
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js
@@ -16,5 +12,14 @@ jobs:
       with:
         node-version: 14.x
         cache: 'npm'
+    - name: Get package version
+      run: echo "::set-output ::name=version::$(node -pe \"require('./package.json').version\")"
+      id: get-version
     - run: npm ci
     - run: npm run build --if-present
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: packages/*
+        tag_name: v${{ steps.get-version.outputs.version }}
+        fail_on_unmatched_files: true
