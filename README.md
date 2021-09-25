@@ -1,5 +1,7 @@
 # comment viewer extension
 
+[![Build](https://github.com/mokemoko/comment-viewer-extension/actions/workflows/build.yml/badge.svg)](https://github.com/mokemoko/comment-viewer-extension/actions/workflows/build.yml)
+
 [CommentScreen](https://commentscreen.com/) のコメントを任意のページで確認・投稿できるようになるブラウザ拡張機能
 
 ## Install
