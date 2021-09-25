@@ -15,5 +15,6 @@ module.exports = {
     config.plugins.push(new VueLoaderPlugin())
 
     return config;
-  }
+  },
+  copyIgnore: [ '**/*.js', '**/*.json', '**/*.vue' ],
 }
